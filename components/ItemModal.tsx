@@ -181,7 +181,9 @@ export default function ItemModal({ item, onClose, onSave }: Props) {
             <label>Rarity *</label>
             <select
               value={formData.rarity}
-              onChange={(e) => setFormData({ ...formData, rarity: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, rarity: e.target.value as DropItem['rarity'] })
+              }
               required
             >
               <option value="common">Common</option>

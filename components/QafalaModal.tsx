@@ -323,22 +323,22 @@ export default function QafalaModal({ schedule, onClose, onSave }: Props) {
                   if (file.size > 5 * 1024 * 1024) {
                     alert('File size must be less than 5MB');
                     return;
-                  }
-                  try {
-                    const formData = new FormData();
-                    formData.append('file', file);
-                    const adminSecret = process.env.NEXT_PUBLIC_ADMIN_SECRET || '';
-                    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-                    const response = await fetch(`${apiUrl}/api/media/upload`, {
-                      method: 'POST',
-                      headers: { 'x-admin-key': adminSecret },
-                      body: formData,
-                    });
-                    const data = await response.json();
-                    if (data.ok && data.url) {
-                      setFormData({ ...formData, backgroundImage: data.url });
-                    } else {
-                      alert(data.error || 'Failed to upload image');
+	                  }
+	                  try {
+	                    const uploadData = new FormData();
+	                    uploadData.append('file', file);
+	                    const adminSecret = process.env.NEXT_PUBLIC_ADMIN_SECRET || '';
+	                    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+	                    const response = await fetch(`${apiUrl}/api/media/upload`, {
+	                      method: 'POST',
+	                      headers: { 'x-admin-key': adminSecret },
+	                      body: uploadData,
+	                    });
+	                    const data = await response.json();
+	                    if (data.ok && data.url) {
+	                      setFormData({ ...formData, backgroundImage: data.url });
+	                    } else {
+	                      alert(data.error || 'Failed to upload image');
                     }
                   } catch (error: any) {
                     alert('Failed to upload image: ' + error.message);

@@ -67,6 +67,9 @@ export interface DropItem {
   _id?: string;
   key: string;
   title: string;
+  // Backward-compat: some UI code treats `title` as English and stores Arabic in `titleAr`.
+  // Backend uses `title` (Arabic) and `titleEn` (English).
+  titleAr?: string;
   titleEn?: string;
   description?: string;
   descriptionEn?: string;
