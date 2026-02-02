@@ -1,40 +1,51 @@
-name: Deploy Dashboard
+name: Deploy Dashboard to VPS
 
 on:
   push:
     branches: ["main"]
   workflow_dispatch:
 
+env:
+  IMAGE_DASHBOARD: ghcr.io/mahmoudagaber/qafela-dashboard
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
-          node-version: "20"
-          cache: "npm"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
 
-      - name: Install
-        run: npm ci
+      - name: Build and push dashboard image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_DASHBOARD }}:latest
+            ${{ env.IMAGE_DASHBOARD }}:${{ github.sha }}
 
-      - name: Build
-        run: npm run build
-
-      # Expects the repo already cloned on the VPS at $VPS_DASHBOARD_PATH.
-      # You can replace this with a Docker deploy later if you prefer.
-      - name: Deploy on VPS (SSH)
+      - name: Deploy dashboard on VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_PORT || 22 }}
+          port: ${{ secrets.VPS_PORT }}
           script: |
             set -e
-            cd ${{ secrets.VPS_DASHBOARD_PATH }}
-            git pull
-            npm ci
-            npm run build
-            pm2 restart qafela-dashboard || pm2 start npm --name qafela-dashboard -- start -- -p 3000
+            cd /opt/qafela/compose
+            docker compose pull dashboard
+            docker compose up -d dashboard
+            docker image prune -f
