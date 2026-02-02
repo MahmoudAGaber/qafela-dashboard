@@ -1,0 +1,40 @@
+name: Deploy Dashboard
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # Expects the repo already cloned on the VPS at $VPS_DASHBOARD_PATH.
+      # You can replace this with a Docker deploy later if you prefer.
+      - name: Deploy on VPS (SSH)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            set -e
+            cd ${{ secrets.VPS_DASHBOARD_PATH }}
+            git pull
+            npm ci
+            npm run build
+            pm2 restart qafela-dashboard || pm2 start npm --name qafela-dashboard -- start -- -p 3000
