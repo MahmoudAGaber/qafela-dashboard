@@ -3,10 +3,14 @@ name: Deploy Dashboard to VPS
 on:
   push:
     branches: ["main"]
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 env:
   IMAGE_DASHBOARD: ghcr.io/mahmoudagaber/qafela-dashboard
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build-and-deploy:
@@ -28,10 +32,10 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push dashboard image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
