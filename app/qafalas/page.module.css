@@ -1,0 +1,125 @@
+.container {
+  max-width: 1400px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.header h1 {
+  font-size: 32px;
+  color: var(--text-dark);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+
+.date {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-gap: 24px;
+  gap: 24px;
+}
+
+.qafalaCard {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.qafalaCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--border-light);
+}
+
+.cardHeader h3 {
+  font-size: 18px;
+  color: var(--text-dark);
+  margin: 0;
+  font-weight: 600;
+}
+
+.status {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.scheduled {
+  background: linear-gradient(135deg, #FFF3CD, #FFE082);
+  color: #856404;
+  border: 1px solid #FFC107;
+}
+
+.published {
+  background: linear-gradient(135deg, #D4EDDA, #C8E6C9);
+  color: #155724;
+  border: 1px solid #81C784;
+}
+
+.cancelled {
+  background: linear-gradient(135deg, #F8D7DA, #F5C6CB);
+  color: #721C24;
+  border: 1px solid #E57373;
+}
+
+.info {
+  margin-bottom: 16px;
+}
+
+.info div {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.itemsPreview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.itemTag {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, var(--light-sand), var(--sand));
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--text-dark);
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 2px var(--shadow-light);
+}
+
+.moreItems {
+  padding: 6px 12px;
+  color: var(--text-light);
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 500;
+}
