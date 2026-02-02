@@ -83,6 +83,7 @@ export interface DropItem {
   imageUrl?: string;
   type?: string;
   icon?: string;
+  enabled?: boolean;
 }
 
 export interface Drop {
